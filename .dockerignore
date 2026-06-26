@@ -1,0 +1,14 @@
+node_modules
+dist
+.git
+.gitignore
+.env
+*.env
+!.env.example
+Preliminary Questions and Resources
+test
+README.md
+.vscode
+.idea
+*.log
+.claude
