@@ -156,7 +156,7 @@ export class ReasoningEngine {
 
     // 6) Wrong transfer.
     if (leading === 'wrong_transfer') {
-      const m = matchByAmount(txns, amounts);
+      const m = matchByAmount(txns, amounts, complaint);
       let verdict: EvidenceVerdict = m.verdict;
       const reasonCodes = [...m.reason_codes];
 
@@ -189,7 +189,7 @@ export class ReasoningEngine {
 
     // 7) Refund request (change of mind / merchant-policy dependent).
     if (leading === 'refund_request') {
-      const m = matchByAmount(txns, amounts);
+      const m = matchByAmount(txns, amounts, complaint);
       return this.build({
         ...base,
         case_type: 'refund_request',

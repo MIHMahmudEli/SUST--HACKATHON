@@ -1,0 +1,17 @@
+[
+  {
+    "note": "Counterparty disambiguation: two same-amount transfers to different numbers; complaint names one number",
+    "input": { "ticket_id": "T1", "complaint": "I sent 1000 to 01812334455 but it went wrong, please check.", "transaction_history": [ { "transaction_id": "TXN-A", "type": "transfer", "amount": 1000, "counterparty": "+8801712001122", "status": "completed", "timestamp": "2026-04-13T11:20:00Z" }, { "transaction_id": "TXN-B", "type": "transfer", "amount": 1000, "counterparty": "+8801812334455", "status": "completed", "timestamp": "2026-04-13T19:45:00Z" } ] },
+    "expect": { "relevant_transaction_id": "TXN-B" }
+  },
+  {
+    "note": "Time disambiguation: two same-amount transfers at different times; complaint says 'around 2pm'",
+    "input": { "ticket_id": "T2", "complaint": "I sent 2000 to a wrong number around 2pm today.", "transaction_history": [ { "transaction_id": "TXN-M", "type": "transfer", "amount": 2000, "counterparty": "+8801700000001", "status": "completed", "timestamp": "2026-04-14T09:05:00Z" }, { "transaction_id": "TXN-N", "type": "transfer", "amount": 2000, "counterparty": "+8801700000002", "status": "completed", "timestamp": "2026-04-14T14:08:00Z" } ] },
+    "expect": { "relevant_transaction_id": "TXN-N" }
+  },
+  {
+    "note": "Counterparty-only match with no amount in the complaint (biller named)",
+    "input": { "ticket_id": "T3", "complaint": "My payment to DESCO did not go through but money gone.", "transaction_history": [ { "transaction_id": "TXN-P", "type": "payment", "amount": 850, "counterparty": "BILLER-DESCO", "status": "failed" } ] },
+    "expect": { "case_type": "payment_failed", "relevant_transaction_id": "TXN-P" }
+  }
+]

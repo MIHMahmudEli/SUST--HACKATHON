@@ -14,6 +14,7 @@ export const KW = {
     'wrong number', 'wrong person', 'wrong recipient', 'wrong account',
     'sent to wrong', 'mistakenly sent', 'by mistake', 'typed it wrong', 'mistype',
     'didn\'t get it', 'did not get it', 'not received', "didn't receive",
+    'went wrong', 'it went wrong', 'went to the wrong', 'sent to the wrong', 'wrong recipient',
     'ভুল নম্বর', 'ভুল মানুষ', 'ভুল করে', 'ভুলে পাঠিয়েছি', 'পায়নি',
     // Banglish
     'bhul number', 'bhul nombor', 'bhul manush', 'bhul kore', 'vul number', 'vul kore', 'pai nai', 'paini',
@@ -21,9 +22,10 @@ export const KW = {
   payment_failed: [
     'failed', 'fail', 'transaction failed', 'payment failed', 'showed failed', 'fail holo', 'fail holo',
     'but balance deducted', 'balance was deducted', 'money deducted', 'cut from my balance', 'deducted',
+    'did not go through', "didn't go through", 'not go through', 'did not complete', 'money gone', 'money is gone',
     'ফেইল', 'ব্যর্থ', 'টাকা কেটে', 'ব্যালেন্স কেটে',
     // Banglish
-    'kete nilo', 'kete niyeche', 'kete nielo', 'kete', 'taka kete', 'balance kete', 'tk kete', 'kata holo',
+    'kete nilo', 'kete niyeche', 'kete nielo', 'kete', 'taka kete', 'balance kete', 'tk kete', 'kata holo', 'taka gone',
   ],
   refund_request: [
     'refund', 'return my money', 'give my money back', 'money back',

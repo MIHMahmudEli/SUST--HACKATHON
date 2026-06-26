@@ -162,9 +162,9 @@
       "case_type": "refund_request",
       "severity": "low",
       "department": "customer_support",
-      "agent_summary": "Customer requests a refund of 500 BDT for TXN-9401 due to change of mind. Not a service failure.",
+      "agent_summary": "Customer requests a refund of 500 BDT for TXN-9401 (change of mind). Not a service failure.",
       "recommended_next_action": "Inform the customer that refund eligibility depends on the merchant's own policy. Provide guidance on contacting the merchant directly for a refund.",
-      "customer_reply": "Thank you for reaching out. Refunds for completed transactions depend on the merchant's own policy. We will facilitate any eligible amount being returned through official channels. Please do not share your PIN or OTP with anyone.",
+      "customer_reply": "Thank you for reaching out. We understand you'd like to return the payment made to a merchant. Refunds for completed merchant payments depend on the merchant's own policy. Please check with the merchant directly for their refund process. If you need assistance with this, please reply and we'll be happy to help. Please do not share your PIN or OTP with anyone.",
       "human_review_required": false,
       "confidence": 0.85,
       "reason_codes": [
@@ -192,7 +192,7 @@
       "department": "fraud_risk",
       "agent_summary": "Customer reports an unsolicited contact claiming to be from the company and requesting credentials (e.g. OTP). Likely social engineering attempt; verify and log.",
       "recommended_next_action": "Escalate to fraud_risk immediately. Reassure the customer the company never asks for OTP/PIN. Log the reported number/sender for fraud pattern analysis.",
-      "customer_reply": "Thank you for reaching out before sharing any information. We take all incidents of unsolicited contact seriously. For your protection, we never ask for your PIN, OTP, or password under any circumstances. Please do not share these with anyone, even if they claim to be from us. Our fraud team has been notified of this incident and will investigate further. Any eligible amount will be returned through official channels.",
+      "customer_reply": "Thank you for reaching out before sharing any information. We never ask for your PIN, OTP, or password under any circumstances. Please do not share these with anyone, even if they claim to be from us. Our fraud team has been notified of this incident.",
       "human_review_required": true,
       "confidence": 0.95,
       "reason_codes": [
