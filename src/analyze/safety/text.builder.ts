@@ -21,6 +21,19 @@ export class TextBuilder {
     const cp = d.matched?.counterparty;
     const bn = d.language === 'bn';
 
+    // Already-reversed: state the factual ledger status (safe — not a promise of action)
+    // and route to verification rather than confirming a new refund.
+    if (d.matched?.status === 'reversed') {
+      return {
+        agent_summary: `Customer reports an issue with ${money(amount)} (${id}), but the transaction status is 'reversed' — the amount appears to have already been returned. Verify settlement of the reversal.`,
+        recommended_next_action: `Confirm that the reversal of ${id} has settled to the customer's balance. If the customer has not received it, escalate to the relevant team for verification through official channels.`,
+        customer_reply: bn
+          ? `আমাদের রেকর্ড অনুযায়ী লেনদেন ${id} ইতিমধ্যে রিভার্স করা হয়েছে। আপনি যদি ফেরত পরিমাণটি না পেয়ে থাকেন, আমাদের দল অফিসিয়াল চ্যানেলে বিষয়টি যাচাই করবে।`
+          : `Our records indicate that transaction ${id} was reversed. If you have not yet received the reversed amount, our team will verify this for you through official support channels.`,
+        appendCredentialNote: true,
+      };
+    }
+
     switch (d.case_type) {
       case 'phishing_or_social_engineering':
         return {

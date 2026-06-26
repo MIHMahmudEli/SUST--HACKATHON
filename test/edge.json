@@ -1,0 +1,17 @@
+[
+  {
+    "note": "Reversed status on a 'failed/deducted' payment -> inconsistent, already_reversed",
+    "input": { "ticket_id": "R1", "complaint": "My payment of 1200 failed and money was deducted, fix it.", "transaction_history": [ { "transaction_id": "TXN-R1", "type": "payment", "amount": 1200, "counterparty": "MERCH-Z", "status": "reversed" } ] },
+    "expect": { "evidence_verdict": "inconsistent" }
+  },
+  {
+    "note": "Reversed status on a wrong-transfer claim -> inconsistent, already_reversed",
+    "input": { "ticket_id": "R2", "complaint": "I sent 3000 to wrong number, please reverse.", "transaction_history": [ { "transaction_id": "TXN-R2", "type": "transfer", "amount": 3000, "counterparty": "+8801799999999", "status": "reversed" } ] },
+    "expect": { "evidence_verdict": "inconsistent" }
+  },
+  {
+    "note": "Phone digits must not be parsed as the amount; real amount is 5000",
+    "input": { "ticket_id": "P1", "complaint": "I sent money to 01911223344, the amount was 5000, it went wrong.", "transaction_history": [ { "transaction_id": "TXN-P1", "type": "transfer", "amount": 5000, "counterparty": "+8801911223344", "status": "completed" } ] },
+    "expect": { "relevant_transaction_id": "TXN-P1" }
+  }
+]

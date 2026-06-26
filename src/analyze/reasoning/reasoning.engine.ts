@@ -233,19 +233,31 @@ export class ReasoningEngine {
     confidence: number;
     reason_codes: string[];
   }): Decision {
+    let verdict = p.verdict;
+    const reasonCodes = [...p.reason_codes];
+
+    // Already-reversed: the matched transaction shows the money was returned, which
+    // contradicts a complaint that implies an unresolved loss/failure.
+    if (p.matched?.status === 'reversed' && verdict === 'consistent') {
+      verdict = 'inconsistent';
+      reasonCodes.push('already_reversed');
+    }
+
     // Escalate to human review whenever evidence contradicts the complaint.
-    const human = p.human_review_required || p.verdict === 'inconsistent' || this.highValue(p.matched);
+    const human = p.human_review_required || verdict === 'inconsistent' || this.highValue(p.matched);
     return {
       language: p.language,
-      amount: p.amount,
+      // Prefer the matched transaction's amount for accurate summaries; fall back to the
+      // first amount parsed from the complaint.
+      amount: (typeof p.matched?.amount === 'number' ? p.matched.amount : p.amount),
       relevant_transaction_id: p.matched ? p.matched.transaction_id : null,
-      evidence_verdict: p.verdict,
+      evidence_verdict: verdict,
       case_type: p.case_type,
       severity: p.severity,
       department: p.department,
       human_review_required: human,
       confidence: p.confidence,
-      reason_codes: p.reason_codes,
+      reason_codes: reasonCodes,
       matched: p.matched,
     };
   }

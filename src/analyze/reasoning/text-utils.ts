@@ -92,13 +92,18 @@ export function wordsToNumbers(text: string): number[] {
 }
 
 // Pull candidate money amounts: digit forms (ASCII + Bangla, with separators) AND
-// number words. De-duplicated, positive only.
+// number words. Phone numbers and clock times are stripped first so they are not
+// mistaken for amounts. De-duplicated, positive, capped below an implausible ceiling.
+const AMOUNT_CEILING = 100_000_000; // 10 crore BDT — anything larger is almost certainly a phone/ID
 export function extractAmounts(complaint: string): number[] {
-  const text = normalizeDigits(complaint);
+  const text = normalizeDigits(complaint)
+    .replace(/(?:\+?880)?0?1[3-9]\d{8}/g, ' ') // BD mobile numbers
+    .replace(/\b\d{1,2}\s*[:.]\s*\d{2}\b/g, ' ') // clock times 14:08 / 2.30
+    .replace(/\b\d{1,2}\s*(?:am|pm)\b/gi, ' '); // 2pm / 11 am
   const digitMatches = text.match(/\d[\d,]*(?:\.\d+)?/g) ?? [];
   const fromDigits = digitMatches
     .map((m) => Number(m.replace(/,/g, '')))
-    .filter((n) => Number.isFinite(n) && n > 0);
+    .filter((n) => Number.isFinite(n) && n > 0 && n < AMOUNT_CEILING);
   const fromWords = wordsToNumbers(complaint);
   return Array.from(new Set([...fromDigits, ...fromWords]));
 }
