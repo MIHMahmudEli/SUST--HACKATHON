@@ -7,7 +7,7 @@ import {
   EvidenceVerdict,
   Severity,
 } from '../domain/enums';
-import { detectLanguage, extractAmounts } from './text-utils';
+import { detectLanguage, extractAmounts, stripInjection } from './text-utils';
 import { hasPhishingSignal, scoreCaseTypes } from './classifier';
 import { findDuplicate, matchByAmount } from './matcher';
 
@@ -30,8 +30,11 @@ const HIGH_VALUE_THRESHOLD = 25000;
 @Injectable()
 export class ReasoningEngine {
   analyze(dto: AnalyzeTicketDto): Decision {
-    const complaint = dto.complaint ?? '';
-    const language = detectLanguage(complaint, dto.language);
+    const rawComplaint = dto.complaint ?? '';
+    const language = detectLanguage(rawComplaint, dto.language);
+    // Strip embedded prompt-injection clauses before reasoning so adversarial text cannot
+    // distort classification. The safety guard still validates final output regardless.
+    const complaint = stripInjection(rawComplaint);
     const txns = dto.transaction_history ?? [];
     const amounts = extractAmounts(complaint);
     const base = { language, amount: amounts[0] ?? null };
@@ -75,29 +78,44 @@ export class ReasoningEngine {
 
     // 3) Payment failed (with possible balance deduction).
     if (leading === 'payment_failed') {
-      const failed = txns.find(
-        (t) => t.type === 'payment' && amounts.includes(t.amount as number) && t.status === 'failed',
+      const amountMatch = (t: TransactionDto) =>
+        amounts.length === 0 || amounts.includes(t.amount as number);
+      const failed = txns.find((t) => t.type === 'payment' && amountMatch(t) && t.status === 'failed');
+      // Complaint asserts failure but the matching payment actually completed -> contradiction.
+      const completedMatch = txns.find(
+        (t) => t.type === 'payment' && amountMatch(t) && t.status === 'completed',
       );
-      const anyMatch = failed ?? txns.find((t) => amounts.includes(t.amount as number)) ?? null;
+      const anyMatch = failed ?? completedMatch ?? txns.find(amountMatch) ?? null;
+      const verdict: EvidenceVerdict = !anyMatch
+        ? 'insufficient_data'
+        : failed
+          ? 'consistent'
+          : completedMatch
+            ? 'inconsistent'
+            : 'consistent';
       return this.build({
         ...base,
         case_type: 'payment_failed',
         matched: anyMatch,
-        verdict: anyMatch ? 'consistent' : 'insufficient_data',
+        verdict,
         severity: 'high',
         department: 'payments_ops',
-        human_review_required: this.highValue(anyMatch),
-        confidence: anyMatch ? 0.88 : 0.55,
-        reason_codes: anyMatch
-          ? ['payment_failed', 'potential_balance_deduction']
-          : ['payment_failed', 'no_amount_match'],
+        human_review_required: this.highValue(anyMatch) || verdict === 'inconsistent',
+        confidence: !anyMatch ? 0.55 : verdict === 'inconsistent' ? 0.7 : 0.88,
+        reason_codes: !anyMatch
+          ? ['payment_failed', 'no_amount_match']
+          : verdict === 'inconsistent'
+            ? ['payment_failed', 'status_contradiction']
+            : ['payment_failed', 'potential_balance_deduction'],
       });
     }
 
-    // 4) Agent cash-in not reflected.
+    // 4) Agent cash-in (or cash-out) not reflected.
     if (leading === 'agent_cash_in_issue') {
       const cashIn = txns.find(
-        (t) => t.type === 'cash_in' && (amounts.length === 0 || amounts.includes(t.amount as number)),
+        (t) =>
+          (t.type === 'cash_in' || t.type === 'cash_out') &&
+          (amounts.length === 0 || amounts.includes(t.amount as number)),
       ) ?? null;
       return this.build({
         ...base,

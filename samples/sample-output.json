@@ -162,9 +162,9 @@
       "case_type": "refund_request",
       "severity": "low",
       "department": "customer_support",
-      "agent_summary": "Customer requests a refund of 500 BDT for TXN-9401 (change of mind). Not a service failure.",
+      "agent_summary": "Customer requests a refund of 500 BDT for TXN-9401 due to change of mind. Not a service failure.",
       "recommended_next_action": "Inform the customer that refund eligibility depends on the merchant's own policy. Provide guidance on contacting the merchant directly for a refund.",
-      "customer_reply": "Thank you for reaching out. We understand you'd like a refund for TXN-9401. Please note that refunds for completed merchant payments are subject to the merchant's own policy. We'll be happy to assist you through official channels if any eligible amount is due to be returned. Please do not share your PIN or OTP with anyone.",
+      "customer_reply": "Thank you for reaching out. Refunds for completed transactions depend on the merchant's own policy. We will facilitate any eligible amount being returned through official channels. Please do not share your PIN or OTP with anyone.",
       "human_review_required": false,
       "confidence": 0.85,
       "reason_codes": [
@@ -192,7 +192,7 @@
       "department": "fraud_risk",
       "agent_summary": "Customer reports an unsolicited contact claiming to be from the company and requesting credentials (e.g. OTP). Likely social engineering attempt; verify and log.",
       "recommended_next_action": "Escalate to fraud_risk immediately. Reassure the customer the company never asks for OTP/PIN. Log the reported number/sender for fraud pattern analysis.",
-      "customer_reply": "Thank you for reaching out before sharing any information. We take all incidents of unsolicited contact seriously. Please be assured that we never ask for your PIN, OTP, or password under any circumstances. If you've shared any information, please do not worry, our fraud team has been notified and will investigate this incident. Any eligible amount will be returned through official channels.",
+      "customer_reply": "Thank you for reaching out before sharing any information. We take all incidents of unsolicited contact seriously. For your protection, we never ask for your PIN, OTP, or password under any circumstances. Please do not share these with anyone, even if they claim to be from us. Our fraud team has been notified of this incident and will investigate further. Any eligible amount will be returned through official channels.",
       "human_review_required": true,
       "confidence": 0.95,
       "reason_codes": [
@@ -238,7 +238,7 @@
       "department": "customer_support",
       "agent_summary": "Customer reports a vague concern without specifying a transaction, amount, or issue. Insufficient detail to identify any relevant transaction.",
       "recommended_next_action": "Reply to the customer asking for specific details: which transaction, what amount, what went wrong, and approximate time.",
-      "customer_reply": "Thank you for reaching out. To better assist you, could you please provide more information about your concern, such as the transaction ID, the amount involved, and a brief description of what you're experiencing? Please do not share your PIN or OTP with anyone.",
+      "customer_reply": "Thank you for reaching out. To help you faster, please share the transaction ID, the amount involved, and a short description of what went wrong. Please do not share your PIN or OTP with anyone.",
       "human_review_required": false,
       "confidence": 0.6,
       "reason_codes": [
@@ -329,7 +329,7 @@
       "department": "dispute_resolution",
       "agent_summary": "Customer reports a transfer to the wrong/unintended recipient, but the relevant transaction could not be uniquely identified from the provided history.",
       "recommended_next_action": "Ask the customer for the recipient number and approximate time to identify the correct transaction. Do not initiate a dispute until the transaction is confirmed.",
-      "customer_reply": "Thank you for reaching out. To assist with your inquiry, please provide the recipient's account details and the approximate time of the transfer, so we can look into this further. Please do not share your PIN or OTP with anyone.",
+      "customer_reply": "Thank you for reaching out. To identify the correct transaction, could you please share the recipient number and the approximate time of the transfer? Please do not share your PIN or OTP with anyone.",
       "human_review_required": false,
       "confidence": 0.65,
       "reason_codes": [
@@ -367,7 +367,7 @@
       "department": "merchant_operations",
       "agent_summary": "Merchant reports 15000 BDT settlement (TXN-9901) delayed beyond the expected window. Settlement status is pending.",
       "recommended_next_action": "Route to merchant_operations to verify settlement batch status. If the batch is delayed, communicate a revised ETA to the merchant.",
-      "customer_reply": "We have noted your concern about settlement TXN-9901. Our merchant operations team will investigate the batch status and provide an update on the expected settlement time through official channels.",
+      "customer_reply": "We have noted your concern about settlement TXN-9901. Our merchant operations team will check the batch status and update you on the expected settlement time through official channels.",
       "human_review_required": false,
       "confidence": 0.9,
       "reason_codes": [
@@ -413,7 +413,7 @@
       "department": "payments_ops",
       "agent_summary": "Customer reports a duplicate payment. Two identical 850 BDT payments appear close together; TXN-10002 is likely the duplicate.",
       "recommended_next_action": "Verify the duplicate with payments_ops. If the biller confirms only one payment was received, initiate reversal of TXN-10002.",
-      "customer_reply": "We have noted the possible duplicate payment for transaction TXN-10002. Our payments team will verify the issue with the biller and any eligible amount will be returned through official channels. Please do not share your PIN or OTP with anyone.",
+      "customer_reply": "We have noted the possible duplicate payment for transaction TXN-10002. Our payments team will verify with the biller and any eligible amount will be returned through official channels. Please do not share your PIN or OTP with anyone.",
       "human_review_required": true,
       "confidence": 0.9,
       "reason_codes": [
